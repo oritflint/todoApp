@@ -1,0 +1,10 @@
+.app{
+    main{
+        padding: 10px;
+
+        .list-container{
+            width:25%;
+            height: calc(100vh - 64px);
+        }
+    }
+}
