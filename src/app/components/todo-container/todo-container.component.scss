@@ -1,0 +1,19 @@
+
+.app-todo-component{
+    display:flex;
+
+    .list-container{
+
+        width:25%;
+        height: calc(100vh - 84px);
+    }
+    
+    .todo-container{
+        width:75%;
+        .new-todo-btn{
+            position:absolute ;
+            bottom:20px;
+            right:20px;
+        }
+    }
+}
