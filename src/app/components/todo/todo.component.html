@@ -1,0 +1,11 @@
+<mat-card class="todo-card" *ngIf="todo && !todo.isArchived">
+    <mat-card-header>
+      <mat-card-title>{{todo.title}}</mat-card-title>
+      <mat-card-subtitle>{{todo.description}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onComplete()">Complete</button>
+      <button mat-raised-button color="warn" (click)="onArchive()">Archive</button>
+    </mat-card-actions>
+  </mat-card>

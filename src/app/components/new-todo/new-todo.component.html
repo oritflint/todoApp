@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Add new Todo</h2>
+<mat-dialog-content>please insert todo details</mat-dialog-content>
+<span class="new-todo-title">title</span>
+<input type="text" id="todoTitle" class="new-todo-input"/>
+<span class="new-todo-title">description</span>
+<input type="text" id="todoDesc" class="new-todo-input" />
+<span class="new-todo-title">Date</span>
+<input type="text" id="todoDate" class="new-todo-input" />
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button [mat-dialog-close]="true">Add</button>
+</mat-dialog-actions>

@@ -7,12 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MaterialModule} from './moduls/material.module';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { TodoComponent } from './components/todo/todo.component';
+import { NewTodoComponent } from './components/new-todo/new-todo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    TodoListComponent
+    TodoListComponent,
+    TodoComponent,
+    NewTodoComponent,
   ],
   imports: [
     BrowserModule,
