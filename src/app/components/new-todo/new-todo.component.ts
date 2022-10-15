@@ -35,7 +35,6 @@ export class NewTodoComponent {
         };
 
         this.todoService.addNewTodo(newTodo)
-          debugger
         this.dialog.closeAll();
         console.log("onsubmit:")
         console.log(this.form)

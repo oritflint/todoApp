@@ -88,10 +88,23 @@ export class TodoService {
   public getTodos(): Observable<Array<Itodo>> {
     if(!this._todosSubject.value.length){
       const JSONtodoList: string = localStorage.getItem("todoList")
+      
       if(JSONtodoList){
         const curList: Itodo[] = JSON.parse(JSONtodoList)
+
+        let i: number = 0
+        while (curList[i].isArchived) {i++}
+        curList[i].selected=true
+
+        for (let j=i+1; j<curList.length; j++) {
+          if(curList[j].selected){
+            curList[j].selected=false
+            break
+          }
+        }
+
+        this._singleTodoSubject.next(curList[i])
         this._todosSubject.next(curList);
-        this._singleTodoSubject.next(curList[0])
       }
     }
     return this._todosSubject.asObservable();
@@ -109,10 +122,29 @@ export class TodoService {
   public addNewTodo(newTodo: Itodo): void{
 
     const curList: Itodo[] = this._todosSubject.value;
-    const JSONtodoList: string = JSON.stringify(curList)
+    curList.forEach(todo => {
+      todo.selected=false
+    });
     curList.push(newTodo);
+    const JSONtodoList: string = JSON.stringify(curList)
     
     this._todosSubject.next(curList)
+    this.setSingleTodo(newTodo)
     localStorage.setItem("todoList", JSONtodoList)
+  }
+
+  public updateTodo(todoId: string, action: string): void {
+    const curList: Itodo[] = this._todosSubject.value;
+    const todoIndex :number = curList.findIndex((singleTodo)=> singleTodo.id = todoId)
+
+    curList[todoIndex][action] = true
+
+    const JSONtodoList: string = JSON.stringify(curList)
+    this._todosSubject.next(curList)
+    localStorage.setItem("todoList", JSONtodoList)
+  }
+
+  public initSelected(){
+
   }
 }

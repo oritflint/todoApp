@@ -20,9 +20,11 @@ export class TodoComponent implements OnInit {
 
   onComplete(){
     this.todo.isCompleted=true;
+    this.todoService.updateTodo(this.todo.id, 'isCompleted')
   }
 
   onArchive(){
     this.todo.isArchived=true;
+    this.todoService.updateTodo(this.todo.id, 'isArchived')
   }
 }
