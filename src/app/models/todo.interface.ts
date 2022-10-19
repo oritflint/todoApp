@@ -5,6 +5,6 @@ export interface Itodo{
     description: String;
     isCompleted: boolean;
     isArchived: boolean;
-    endDate: Date | number | string;
-    selected: boolean;
+    endDate: Date;
+    isSelected: boolean;
 }

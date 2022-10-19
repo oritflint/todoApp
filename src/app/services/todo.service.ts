@@ -1,6 +1,7 @@
 import {Observable,  BehaviorSubject, Subject} from 'rxjs'
 import { Injectable } from '@angular/core';
 import { Itodo } from '../models/todo.interface';
+import { ApiService } from './apiService.service';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,7 @@ export class TodoService {
 
   private todos: Itodo[] = []
 
-  constructor() { }
+  constructor(private apiService:ApiService) { }
 
   // private _todosSubject: BehaviorSubject<Array<Itodo>> = new BehaviorSubject(this.mock);
   // private _singleTodoSubject: BehaviorSubject<Itodo> = new BehaviorSubject(this.mock[0]);
@@ -85,53 +86,97 @@ export class TodoService {
   private _todosSubject: BehaviorSubject<Array<Itodo>> = new BehaviorSubject(this.todos);
   private _singleTodoSubject: BehaviorSubject<Itodo> = new BehaviorSubject(this.todos.length ? this.todos[0] : null);
 
+
+  //GET LIST
   public getTodos(): Observable<Array<Itodo>> {
+
     if(!this._todosSubject.value.length){
-      const JSONtodoList: string = localStorage.getItem("todoList")
+
+      let JSONtodoList: string = ""
       
-      if(JSONtodoList){
-        const curList: Itodo[] = JSON.parse(JSONtodoList)
+      ////////FETCH DATA FROM LOCALSTORAGE//////////
+      //JSONtodoList = localStorage.getItem("todoList")
+      
+      // if(JSONtodoList){
+      //   const curList: Itodo[] = JSON.parse(JSONtodoList)
 
-        let i: number = 0
-        while (curList[i].isArchived) {i++}
-        curList[i].selected=true
+      //   let i: number = 0
+      //   while (curList[i].isArchived) {i++}
+      //   curList[i].selected=true
 
-        for (let j=i+1; j<curList.length; j++) {
-          if(curList[j].selected){
-            curList[j].selected=false
-            break
+      //   for (let j=i+1; j<curList.length; j++) {
+      //     if(curList[j].selected){
+      //       curList[j].selected=false
+      //       break
+      //     }
+      //   }
+
+      //   this._singleTodoSubject.next(curList[i])
+      //   this._todosSubject.next(curList);
+      // }
+
+      ////////FETCH DATA FROM DATABASE//////////
+      this.apiService.getData().subscribe(data=>{
+        JSONtodoList = JSON.stringify(data)
+      
+        if(JSONtodoList){
+          const curList: Itodo[] = JSON.parse(JSONtodoList)
+          
+          debugger
+          let i: number = 0
+          while (curList[i].isArchived) {i++}
+          if(curList.length>i)
+            curList[i].isSelected=true
+
+          for (let j=i+1; j<curList.length; j++) {
+            if(curList[j].isSelected){
+              curList[j].isSelected=false
+              break
+            }
           }
-        }
 
-        this._singleTodoSubject.next(curList[i])
-        this._todosSubject.next(curList);
-      }
-    }
+          this._singleTodoSubject.next(curList[i])
+          this._todosSubject.next(curList);
+        }
+    })
+
+  }
+
     return this._todosSubject.asObservable();
   }
 
 
+  //GET CURRENT ITEM
   public getSingleTodo(): Observable<Itodo> {
     return this._singleTodoSubject.asObservable();
   }
 
+
+  //SET CURRENT ITEM
   public setSingleTodo(todo: Itodo): void{
     this._singleTodoSubject.next(todo);
   }
 
+
+  //ADD ITEM
   public addNewTodo(newTodo: Itodo): void{
 
     const curList: Itodo[] = this._todosSubject.value;
     curList.forEach(todo => {
-      todo.selected=false
+      todo.isSelected=false
     });
     curList.push(newTodo);
     const JSONtodoList: string = JSON.stringify(curList)
     
     this._todosSubject.next(curList)
     this.setSingleTodo(newTodo)
-    localStorage.setItem("todoList", JSONtodoList)
+    
+    this.apiService.AddItem(newTodo).subscribe()
+
+    //localStorage.setItem("todoList", JSONtodoList)
   }
+
+
 
   public updateTodo(todoId: string, action: string): void {
     const curList: Itodo[] = this._todosSubject.value;
@@ -141,7 +186,10 @@ export class TodoService {
 
     const JSONtodoList: string = JSON.stringify(curList)
     this._todosSubject.next(curList)
-    localStorage.setItem("todoList", JSONtodoList)
+
+    debugger
+    this.apiService.UpdateItem(todoId, curList[todoIndex])
+    //localStorage.setItem("todoList", JSONtodoList)
   }
 
   public initSelected(){

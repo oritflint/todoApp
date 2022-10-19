@@ -2,7 +2,7 @@
     <div class="item-wrap" *ngFor="let item of todos">
         <mat-card class="example-card" 
         (click)="onItemClick(item)" 
-        [ngClass]="{selected : item.selected, completed : item.isCompleted}"
+        [ngClass]="{selected : item.isSelected, completed : item.isCompleted}"
         *ngIf="!item.isArchived"
         >
             <mat-card-title>{{item.title}}</mat-card-title>

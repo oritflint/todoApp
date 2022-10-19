@@ -21,9 +21,9 @@ export class TodoListComponent implements OnInit {
 
   public onItemClick(todo: Itodo): void{
     this.todos.forEach(item => {
-      item.selected=false;
+      item.isSelected=false;
     });
-    todo.selected=true;
+    todo.isSelected=true;
     this.todoService.setSingleTodo(todo)
   }
 }
