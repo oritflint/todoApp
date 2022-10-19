@@ -122,7 +122,6 @@ export class TodoService {
         if(JSONtodoList){
           const curList: Itodo[] = JSON.parse(JSONtodoList)
           
-          debugger
           let i: number = 0
           while (curList[i].isArchived) {i++}
           if(curList.length>i)
